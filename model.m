@@ -22,8 +22,16 @@ f3=IM*phidd==Tp+NM*l*cos(phi)+PM*l*sin(phi);
 %
 func=[thetad,thetadd,xd,xdd,phid,phidd];
 lin_model=jacobian(func,[theta,thetad,x,xd,phi,phid]);
+temp=jacobian(func,[T,Tp]);
+umodel_not_lin=subs(temp,[theta,thetad,xd,phi,phid],zeros(1,5));
 temp=subs(lin_model,[theta,thetad,xd,phi,phid],zeros(1,5));
 final_lin_model=simplify(temp)
+umodel_lin=simplify(umodel_not_lin)
 
+Q=eye(6);
+R=eye(6); % for test
+
+%convert syms to numerical val
+lqr(final_lin_model,umodel_lin,Q,R)
 
             
